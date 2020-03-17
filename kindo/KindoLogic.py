@@ -273,6 +273,7 @@ class Board():
 
     def walled_in(self):
         '''
+        !!!WARNING!!! This method only works for n=5, needs to be generalized
         Checks if a player has been walled in (impossible to ever capture enemy King)
         If yes, returns winning player (1 or -1)
         Else returns 0

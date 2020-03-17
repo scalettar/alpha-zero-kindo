@@ -136,6 +136,13 @@ When playing using pit.py, the game tiles are depicted as follows:
     | < x x |
     ---------
 
+    P1 UNWALLABLE
+    ---------
+    | . x . |
+    | x   x |
+    | . x . |
+    ---------
+
     P2 tiles are the same but with o instead of x
 
 ## Credits
