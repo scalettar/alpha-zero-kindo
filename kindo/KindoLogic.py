@@ -1,3 +1,5 @@
+import math
+
 '''
 Author: Daniel Scalettar (https://github.com/scalettar/)
 Date: March, 2020
@@ -134,7 +136,7 @@ class Board():
                 self.opposingPlayer.numTilesOwned -= 1
                 # Check if any other tiles were detached from opponent's King tile
                 connectedOpponent = self._get_connected_tiles(self.opposingPlayer.playerID)
-                connectedTilesNum = 5
+                connectedTilesNum = len(connectedOpponent)
                 if connectedTilesNum < self.opposingPlayer.numTilesOwned:
                     # Mass capture detached tiles (swap from opponent to current player)
                     self._mass_capture(connectedOpponent)
@@ -184,9 +186,49 @@ class Board():
 
     def _get_connected_tiles(self, player):
         '''
-        Finds all tiles connected to player's King tile and returns them in a list
+        Finds and returns a list of all tiles connected to player's King tile
+        The list uses a flattened index converted from (x, y) coordinate pairs
+        e.g. for n = 5 (5 x 5 board):
+                0	1	2	3	4
+        	-----------------------
+        0	|	0	1	2	3	4
+        1	|	5	6	7	8	9
+        2	|	10	11	12	13	14
+        3	|	15	16	17	18	19
+        4	|	20	21	22	23	24
         '''
-        return []
+        # List of connected tiles
+        connected = []
+        # Stack to traverse through tiles connected to player's King tile
+        stack = []
+        # Push the corresponding player's King tile onto the stack
+        if player == self.player1.playerID:
+            stack.append(self.n * (self.n - 1))
+        else:
+            stack.append(self.n - 1)
+        # Find connected tiles using stack
+        while len(stack):
+            # Explore tile corresponding to first flattened index in stack
+            currentIndex = stack.pop()
+            # Get x and y from flattened index
+            x = math.floor(currentIndex / self.n)
+            y = currentIndex % self.n
+            # If tile is not already in connected array, check if connected
+            if not currentIndex in connected:
+                # Check if tile belongs to player
+                if self.tiles[x][y].owner == player:
+                    # Tile belongs to player so add to connected
+                    connected.append(currentIndex)
+                    # Check if adjacent tiles are also connected
+                    if currentIndex > (self.n - 1): # Check tile above
+                        stack.append(currentIndex - self.n)
+                    if (currentIndex + 1) % self.n != 0: # Check tile to right
+                        stack.append(currentIndex + 1)
+                    if currentIndex < (self.n * (self.n + 1)): # Check tile below
+                        stack.append(currentIndex + self.n)
+                    if currentIndex % self.n != 0: # Check tile to left
+                        stack.append(currentIndex - 1)
+        return connected
 
     def _mass_capture(self, connectedOpponent):
         '''
