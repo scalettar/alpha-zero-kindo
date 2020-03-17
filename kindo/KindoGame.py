@@ -222,6 +222,14 @@ class KindoGame(Game):
         """
         pass
 
+    def getScore(self, board, player):
+        '''
+        Simple evaluation function used by GreedyKindoPlayer to choose action
+        '''
+        b = Board(self.n)
+        b.tiles = np.copy(board)
+        return b.get_tilesOwned_dif(player)
+
     @staticmethod
     def display(board):
         '''

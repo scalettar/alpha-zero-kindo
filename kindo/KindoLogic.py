@@ -48,24 +48,6 @@ class Board():
         self.currentPlayer = self.player1
         self.opposingPlayer = self.player2
 
-    # def get_current_player(self, player):
-    #     '''
-    #     Returns the current player's Player object given a playerID (player)
-    #     '''
-    #     if self.player1.playerID == player:
-    #         return self.player1
-    #     else:
-    #         return self.player2
-    
-    def get_opposing_player(self, player):
-        '''
-        Returns the opposing player's Player object given a playerID (player)
-        '''
-        if self.player1.playerID == player:
-            return self.player2
-        else:
-            return self.player1
-
     def get_legal_moves(self, player):
         '''
         Returns all the legal moves for the player in the given board state
@@ -300,6 +282,32 @@ class Board():
                 return -1
         # No player has been walled in
         return 0
+
+    def get_tilesOwned_dif(self, player):
+        '''
+        Returns the difference in tiles owned by player compared to the other player
+        '''
+        return self._get_this_player(player).numTilesOwned - \
+            self._get_other_player(player).numTilesOwned
+
+    def _get_this_player(self, player):
+        '''
+        Returns the Player object with the same playerID as player
+        '''
+        if self.player1.playerID == player:
+            return self.player1
+        else:
+            return self.player2
+    
+    def _get_other_player(self, player):
+        '''
+        Returns the Player object with a different playerID than player
+        '''
+        if self.player1.playerID == player:
+            return self.player2
+        else:
+            return self.player1
+
 
 class Tile:
     '''
