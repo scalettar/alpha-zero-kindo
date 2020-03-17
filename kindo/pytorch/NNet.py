@@ -18,7 +18,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 
-from .OthelloNNet import OthelloNNet as onnet
+from .KindoNNet import KindoNNet as knnet
 
 args = dotdict({
     'lr': 0.001,
@@ -31,7 +31,7 @@ args = dotdict({
 
 class NNetWrapper(NeuralNet):
     def __init__(self, game):
-        self.nnet = onnet(game, args)
+        self.nnet = knnet(game, args)
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
 

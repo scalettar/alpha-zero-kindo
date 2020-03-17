@@ -167,7 +167,7 @@ class KindoGame(Game):
                
         """
         # Create a copy of the current board
-        b = board(self.n)
+        b = Board(self.n)
         b.tiles = np.copy(board)
         # Check if any of the terminal conditions have been reached
         kingCaptured = b.king_captured()
@@ -280,96 +280,114 @@ class KindoGame(Game):
                 isKing.append(board[x][y].isKing)
                 isUnwallable.append(board[x][y].isUnwallable)
             # Print top line of row x
-            print("   | ", end="")
+            print("   |", end="")
             for y in range(n):
+                # Get tile values at index y
+                o = owner[y]
+                wD = wallDirection[y]
+                hD = hasDot[y]
+                iK = isKing[y]
+                iU = isUnwallable[y]
                 # First
                 print(" ", end="")
                 # Second (top left)
-                if isUnwallable[y]:
-                    print(KindoGame.display_isUnwallable, end="")
-                elif wallDirection[y] == 1 or wallDirection[y] == 4:
-                    print(KindoGame.display_wallDirection, end="")
+                if iU:
+                    print(KindoGame.display_isUnwallable[iU], end="")
+                elif wD == 1 or wD == 4:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Third
                 print(" ", end="")
                 # Fourth (top middle)
-                if wallDirection[y] == 1:
-                    print(KindoGame.display_wallDirection, end="")
+                if wD == 1:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Fifth
                 print(" ", end="")
                 # Sixth (top right)
                 if isUnwallable[y]:
-                    print(KindoGame.display_isUnwallable, end="")
-                elif wallDirection[y] == 1 or wallDirection[y] == 2:
-                    print(KindoGame.display_wallDirection, end="")
+                    print(KindoGame.display_isUnwallable[iU], end="")
+                elif wD == 1 or wD == 2:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Seventh
-                print(" ", end="")
-            print("|")
+                print(" |", end="")
+            print("")
             # Print middle line of row x
-            print(" ", x, " | ", end="")
+            print("", x, "|", end="")
             for y in range(n):
+                # Get tile values at index y
+                o = owner[y]
+                wD = wallDirection[y]
+                hD = hasDot[y]
+                iK = isKing[y]
+                iU = isUnwallable[y]
                 # First
                 print(" ", end="")
                 # Second (middle left)
-                if wallDirection[y] == 4:
-                    print(KindoGame.display_wallDirection, end="")
+                if wD == 4:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Third
                 print(" ", end="")
                 # Fourth (middle middle i.e. center)
-                if isKing[y] == True:
-                    print(KindoGame.display_isKing, end="")
+                if iK == True:
+                    print(KindoGame.display_isKing[iK], end="")
+                elif hD == True:
+                    print(KindoGame.display_hasDot[hD], end="")
                 else:
-                    print(KindoGame.display_hasDot, end="")
+                    print(" ", end="")
                 # Fifth
                 print(" ", end="")
                 # Sixth (middle right)
-                if wallDirection[y] == 2:
-                    print(KindoGame.display_wallDirection, end="")
+                if wD == 2:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Seventh
-                print(" ", end="")
-            print("|")
+                print(" |", end="")
+            print("")
             # Print bottom line of row x
-            print("   | ", end="")
+            print("   |", end="")
             for y in range(n):
+                # Get tile values at index y
+                o = owner[y]
+                wD = wallDirection[y]
+                hD = hasDot[y]
+                iK = isKing[y]
+                iU = isUnwallable[y]
                 # First
                 print(" ", end="")
                 # Second (bottom left)
-                if isUnwallable[y] == True:
-                    print(KindoGame.display_isUnwallable, end="")
-                elif wallDirection[y] == 3 or wallDirection[y] == 4:
-                    print(KindoGame.display_wallDirection, end="")
+                if iU == True:
+                    print(KindoGame.display_isUnwallable[iU], end="")
+                elif wD == 3 or wD == 4:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Third
                 print(" ", end="")
                 # Fourth (bottom middle)
-                if wallDirection[y] == 3:
-                    print(KindoGame.display_wallDirection, end="")
+                if wD == 3:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Fifth
                 print(" ", end="")
                 # Sixth (bottom right)
-                if isUnwallable[y] == True:
-                    print(KindoGame.display_isUnwallable, end="")
-                elif wallDirection[y] == 2 or wallDirection[y] == 3:
-                    print(KindoGame.display_wallDirection, end="")
+                if iU == True:
+                    print(KindoGame.display_isUnwallable[iU], end="")
+                elif wD == 2 or wD == 3:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner, end="")
+                    print(KindoGame.display_owner[o], end="")
                 # Seventh
-                print(" ", end="")
-            print("|")
-        print("   -----------------------------------------")
+                print(" |", end="")
+            print("")
+            # Print bottom boarder of row tiles
+            print("   -----------------------------------------")
   
-
-
-

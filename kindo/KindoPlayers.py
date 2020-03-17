@@ -26,19 +26,19 @@ class HumanKindoPlayer():
                     if ((0 <= x)) and (x < self.game.n) and \
                         (0 <= y) and (y < self.game.n) and \
                             (0 <= w) and (w < self.game.tileTypes):
-                            action = (x * self.game.n * self.game.tileTypes) \
-                                + (y * self.game.tileTypes) + w if x != -1 \
-                                    else self.game.n ** 2
-                                    # Input was valid format, check if valid action
-                                    if validMoves[action]:
-                                        break
-                except valueError:
+                            action = (x * self.game.n * self.game.tileTypes) + \
+                                (y * self.game.tileTypes) + w if x != -1 else \
+                                    self.game.n ** 2
+                            # Input was valid format, check if valid action
+                            if validMoves[action]:
+                                break
+                except ValueError:
                     # Input needs to be an integer
                     'Invalid integer'
-        # Move was invalid, try again
-        print('Invalid move')
-    # Return chosen action
-    return action
+            # Move was invalid, try again
+            print('Invalid move')
+        # Return chosen action
+        return action
 
 class GreedyKindoPlayer():
     '''
@@ -85,6 +85,3 @@ class RandomPlayer():
             action = np.random.randint(self.game.getActionSize())
         # Return chosen action
         return action
-
-
-

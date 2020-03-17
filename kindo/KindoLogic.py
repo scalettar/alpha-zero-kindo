@@ -308,7 +308,6 @@ class Board():
         else:
             return self.player1
 
-
 class Tile:
     '''
     Class used to represent the tiles on the board
@@ -343,3 +342,4 @@ class Player():
         self.movesCurrent = movesCurrent
         self.movesNext = movesNext
         self.numTilesOwned = numTilesOwned
+        

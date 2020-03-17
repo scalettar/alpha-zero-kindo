@@ -1,6 +1,6 @@
 from Coach import Coach
-from othello.OthelloGame import OthelloGame as Game
-from othello.pytorch.NNet import NNetWrapper as nn
+from kindo.KindoGame import KindoGame as Game
+from kindo.pytorch.NNet import NNetWrapper as nn
 from utils import *
 
 args = dotdict({
@@ -15,20 +15,26 @@ args = dotdict({
 
     'checkpoint': './temp/',
     'load_model': False,
-    'load_folder_file': ('/dev/models/8x100x50','best.pth.tar'),
+    'load_folder_file': ('/dev/models/5x100x50','best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
-
 })
 
 if __name__ == "__main__":
-    g = Game(6)
+    # Create game object passing in board dimension
+    g = Game(5)
+    # Create neural network passing in the game object
     nnet = nn(g)
 
+    # Load from checkpoint if flag set
     if args.load_model:
         nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
 
+    # Create coach object which executes self-play and learning
+    # using the functions defined in KindoGame and Kindo's NeuralNet
     c = Coach(g, nnet, args)
+    # Load training examples if flag set
     if args.load_model:
         print("Load trainExamples from file")
         c.loadTrainExamples()
+    # Learn using coach
     c.learn()
