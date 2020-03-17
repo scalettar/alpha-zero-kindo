@@ -48,8 +48,31 @@ class KindoGame(Game):
         Returns:
             actionSize: number of all possible actions
         """
-        # 5 different placement options, 4 walls or a neutral placement
+        # 5 different tile placement options, 4 walls or a neutral placement
         # Add 1 action to total; This final index represents no other legal actions
+
+        # e.g. for n = 5 (5 x 5 board):
+        # STARTING INDICES FOR TILE PLACEMENT ACTIONS FOR EACH TILE (5 actions per tile)
+        # 		0	1	2	3	4
+        # 	-----------------------
+        # 0	|	0	5	10	15	20
+        # 1	|	25	30	35	40	45
+        # 2	|	50	55	60	65	70
+        # 3	|	75	80	85	90	95
+        # 4	|	100	105	110	115	120
+        # Actions 0 - 124 represent a move of form (x, y, w) flattened into a single index
+        # Action 125 is only true if actions 0 - 124 are all invalid
+        
+        # EXAMPLE 1. 
+        # A move (x, y, w) = (3, 2, 4) would mean placing a left facing wall 
+        # in space with x-coordinate = 3 and y-coordinate = 2
+        # This move cooresponds with action 85 + 4 = 89
+
+        # EXAMPLE 2.
+        # Action 90 would coorespond with move (3, 3, 0)
+        # This means capturing tile with x-coordinate = 3 and y-coordinate = 3
+        # without placing any walls
+
         return self.n * self.n * self.tileTypes + 1
 
     def getNextState(self, board, player, action):

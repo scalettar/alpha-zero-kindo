@@ -43,17 +43,17 @@ class Board():
         self.player1 = Player(1, self.INIT_P1_MOVES, self.INIT_P1_MOVES_NEXT, 1)
         self.player2 = Player(-1, self.INIT_P2_MOVES, self.INIT_P2_MOVES_NEXT, 1)
         # Create the current and opposing player reference objects
-        self.currentPlayer = None
-        self.opposingPlayer = None
+        self.currentPlayer = self.player1
+        self.opposingPlayer = self.player2
 
-    def get_current_player(self, player):
-        '''
-        Returns the current player's Player object given a playerID (player)
-        '''
-        if self.player1.playerID == player:
-            return self.player1
-        else:
-            return self.player2
+    # def get_current_player(self, player):
+    #     '''
+    #     Returns the current player's Player object given a playerID (player)
+    #     '''
+    #     if self.player1.playerID == player:
+    #         return self.player1
+    #     else:
+    #         return self.player2
     
     def get_opposing_player(self, player):
         '''
@@ -76,7 +76,7 @@ class Board():
         for x in range(self.n):
             for y in range(self.n):
                 # Check tile owner
-                if self.tiles[x][y].owner == player and (not self.tiles[x][y].isUnwallable):
+                if self.tiles[x][y].owner == player and not (self.tiles[x][y].isUnwallable):
                     # Tile already owned by current player
                     # Valid moves: placing any wall not already on the tile in same direction
                     newMoves = []
@@ -103,8 +103,8 @@ class Board():
         w: type of tile to place (wallDirection of Tile)
         '''
         # Get the current player's Player object (needed to update current moves)
-        self.currentPlayer = self.get_current_player(player)
-        self.opposingPlayer = self.get_opposing_player(player)
+        # self.currentPlayer = self.get_current_player(player)
+        # self.opposingPlayer = self.get_opposing_player(player)
         # Extract move parameters x, y, and w
         (x, y, w) = move
         # Execute move depending on type (capturing or placing wall)
@@ -144,7 +144,18 @@ class Board():
                     # Update number of tiles owned for both players
                     numMassCaptured = self.opposingPlayer.numTilesOwned - connectedTilesNum
                     self.currentPlayer.numTilesOwned += numMassCaptured
-                    self.opposingPlayer.numTilesOwned -= numMassCaptured   
+                    self.opposingPlayer.numTilesOwned -= numMassCaptured 
+        # Determine which player is making the next move
+        if self.currentPlayer.movesCurrent < 1:
+            temp = self.currentPlayer
+            self.currentPlayer = self.opposingPlayer
+            self.opposingPlayer = temp
+            # New current player's moves are updated to be equal to that player's next moves
+            self.currentPlayer.moves = self.currentPlayer.movesNext
+            # New current player's next moves are set to default base number of next moves
+            self.currentPlayer.movesNext = self.MOVES_NEXT_BASE
+            # Remove dots from new current player's tiles
+            self._new_turn_clear_dots()
 
     def _check_valid_adjacent(self, x, y, player):
         '''
@@ -178,8 +189,31 @@ class Board():
         return []
 
     def _mass_capture(self, connectedOpponent):
-        pass
+        '''
+        Swaps ownership from opponent to player of all tiles owned by opponent but
+        no longer connected
+        '''
+        # Check each tile on board and see if ownership swap is needed
+        for x in range(self.n):
+            for y in range(self.n):
+                # Check if tile owned by opponent is no longer connected
+                if self.tiles[x][y].owner == self.opposingPlayer.playerID \
+                    and not (connectedOpponent[x][y] == self.opposingPlayer.playerID):
+                    # Swap tile owner from opponent to current player
+                    self.tiles[x][y].owner = self.currentPlayer
+                    # Remove any walls and dots from the tile
+                    self.tiles[x][y].hasDot = False
+                    self.tiles[x][y].wallDirection = 0
 
+    def _new_turn_clear_dots(self):
+        '''
+        Clear dots from new current player's tiles
+        '''
+        for x in range(self.n):
+            for y in range(self.n):
+                if self.tiles[x][y].owner == self.currentPlayer.playerID:
+                    self.tiles[x][y].hasDot = False
+        
     def king_captured(self):
         '''
         Checks if a King tile has been captured
