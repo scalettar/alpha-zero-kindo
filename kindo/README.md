@@ -1,4 +1,4 @@
-# Alpha Zero General implementation of Kindo
+# Alpha Zero General Implementation of Kindo
 
 This is an implementation of the game Kindo in the Alpha Zero General framework.
 
@@ -61,84 +61,84 @@ NOTE: Bonus moves always apply to your next turn, not your current turn.
 
 When playing using pit.py, the game tiles are depicted as follows:
 
-BOARD
-         0       1       2       3       4    
-     -----------------------------------------
-     |       |       |       |       |       |
-  0  |       |       |       |       |       |
-     |       |       |       |       |       |
-     -----------------------------------------
-     |       |       |       |       |       |
-  1  |       |       |       |       |       |
-     |       |       |       |       |       |
-     -----------------------------------------
-     |       |       |       |       |       |
-  2  |       |       |       |       |       |
-     |       |       |       |       |       |
-     -----------------------------------------
-     |       |       |       |       |       |
-  3  |       |       |       |       |       |
-     |       |       |       |       |       |
-     -----------------------------------------
-     |       |       |       |       |       |
-  4  |       |       |       |       |       |
-     |       |       |       |       |       |
-     ----------------------------------------- 
+    BOARD
+            0       1       2       3       4    
+        -----------------------------------------
+        |       |       |       |       |       |
+     0  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     1  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     2  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     3  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     4  |       |       |       |       |       |
+        |       |       |       |       |       |
+        ----------------------------------------- 
 
-NEUTRAL TILE
- ---------
- |       |
- |       |
- |       |
- ---------
+    NEUTRAL TILE
+    ---------
+    |       |
+    |       |
+    |       |
+    ---------
 
-P1 NO WALL
+    P1 NO WALL
 
- ---------
- | x x x |
- | x   x |
- | x x x |
- ---------
+    ---------
+    | x x x |
+    | x   x |
+    | x x x |
+    ---------
 
-P1 NO WALL (PLAYED LAST)
+    P1 NO WALL (PLAYED LAST)
 
- ---------
- | x x x |
- | x - x |
- | x x x |
- ---------
+    ---------
+    | x x x |
+    | x - x |
+    | x x x |
+    ---------
 
-P1 WALL NORTH
- ---------
- | ^ ^ ^ |
- | x   x |
- | x x x |
- ---------
+    P1 WALL NORTH
+    ---------
+    | ^ ^ ^ |
+    | x   x |
+    | x x x |
+    ---------
 
-P1 WALL EAST
- ---------
- | x x > |
- | x   > |
- | x x > |
- ---------
+    P1 WALL EAST
+    ---------
+    | x x > |
+    | x   > |
+    | x x > |
+    ---------
 
-P1 WALL SOUTH
- ---------
- | x x x |
- | x   x |
- | v v v |
- ---------
+    P1 WALL SOUTH
+    ---------
+    | x x x |
+    | x   x |
+    | v v v |
+    ---------
 
-P1 WALL WEST
- ---------
- | < x x |
- | <   x |
- | < x x |
- ---------
+    P1 WALL WEST
+    ---------
+    | < x x |
+    | <   x |
+    | < x x |
+    ---------
 
- P2 tiles are the same but with o instead of x
+    P2 tiles are the same but with o instead of x
 
- ## Credits
+## Credits
 [Daniel Scalettar](https://github.com/scalettar/)
 * Implementation of Kindo in Alpha Zero General
 [Paul Vauvrey](http://www.pvauvrey.com/).

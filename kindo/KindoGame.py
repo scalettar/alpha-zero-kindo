@@ -12,11 +12,20 @@ Date: March, 2020
 
 class KindoGame(Game):
     '''
-    This class specifies the Kindo class
+    This class specifies the Kindo game.
+    It interacts with the Board class which controls the game state.
     '''
     
     def __init__(self, n=5):
+        # Board dimensions n x n
         self.n = n
+        # Number of different types of tiles a player can have
+        # 0: No wall
+        # 1: Wall facing up
+        # 2: Wall facing right
+        # 3: Wall facing down
+        # 4: Wall facing left
+        self.tileTypes = 5
 
     def getInitBoard(self):
         """
@@ -41,7 +50,7 @@ class KindoGame(Game):
         """
         # 5 different placement options, 4 walls or a neutral placement
         # Add 1 action to total; This final index represents no other legal actions
-        return self.n * self.n * 5 + 1
+        return self.n * self.n * self.tileTypes + 1
 
     def getNextState(self, board, player, action):
         """
@@ -54,11 +63,22 @@ class KindoGame(Game):
             nextBoard: board after applying action
             nextPlayer: player who plays in the next turn (should be -player)
         """
+        # Check if no valid actions
+        if action == self.getActionSize() - 1:
+            # No valid actions, in Kindo this means the game must be over so make no changes
+            return (board, player)
         # Create a copy of the current board
         b = Board(self.n)
         b.tiles = np.copy(board)
-        # Get the move being made from the action
-        
+        # Get move (x, y, w) from flattened action index
+        x = int(action / (self.n * self.tileTypes))
+        y = int((action % (self.n * self.tileTypes)) / self.tileTypes)
+        w = (action % (self.n * self.tileTypes)) % self.tileTypes
+        move = (x, y, w)
+        # Execute move
+        b.execute_move(move, player)
+        # Return updated state and current player
+        return (b.tiles, b.currentPlayer)
         
     def getValidMoves(self, board, player):
         """
@@ -80,10 +100,11 @@ class KindoGame(Game):
         legalMoves = b.get_legal_moves(player)
         # No legal moves found (in Kindo this should only occur when the game is over)
         if len(legalMoves) == 0:
-            validMoves[-1] = 1 # last action (move) index means no other moves valid
+            validMoves[-1] = 1 # last move (action) index means no other moves are valid
             return np.array(validMoves)
-        for x, y in legalMoves:
-            validMoves[self.n * x + y] = 1
+        # Create flattened array of valid moves (actions) from legalMoves list
+        for x, y, w in legalMoves:
+            validMoves[(x * self.n * self.tileTypes) + (y * self.tileTypes) + w] = 1
         # Convert to np array for performance
         return np.array(validMoves)
 
@@ -101,32 +122,18 @@ class KindoGame(Game):
         # Create a copy of the current board
         b = board(self.n)
         b.tiles = np.copy(board)
-        # Check if player 1 captured player 2's King tile
-        if b.tiles[0][4].owner == 1:
-            return 1 if player == 1 else -1 
-        # Check if player 2 captured player 1's King tile
-        if b.tiles[4][0].owner == -1:
-            return 1 if player == -1 else -1
-        # Check if player 1 has walled in player 2
-        if b.tiles[0][2].wallDirection == 2 and b.tiles[1][2].wallDirection == 2 \
-            and b.tiles[2][3].wallDirection == 1 and b.tiles[2][4].wallDirection == 1:
-            # Check if player 1 owns all the tiles walling in player 2
-            if b.tiles[0][2].owner == 1 and b.tiles[1][2].owner == 1 \
-            and b.tiles[2][3].owner == 1 and b.tiles[2][4].owner == 1:
-                return 1 if player == 1 else -1
-        if b.tiles[0][3].wallDirection == 2 and b.tiles[1][4].wallDirection == 1:
-            if b.tiles[0][3].owner == 1 and b.tiles[1][4].owner == 1:
-                return 1 if player == 1 else -1
-        # Check if player 2 has walled in player 1
-        if b.tiles[2][0].wallDirection == 3 and b.tiles[2][1].wallDirection == 3 \
-            and b.tiles[3][2].wallDirection == 4 and b.tiles[4][2].wallDirection == 4:
-            # Check if player 2 owns all the tiles walling in player 1
-            if b.tiles[2][0].owner == -1 and b.tiles[2][1].owner == -1 \
-            and b.tiles[3][2].owner == -1 and b.tiles[4][2].owner == -1:
-                return 1 if player == -1 else 1
-        if b.tiles[3][0].wallDirection == 3 and b.tiles[4][1].wallDirection == 4:
-            if b.tiles[3][0].owner == -1 and b.tiles[4][1].owner == -1:
-                return 1 if player == -1 else -1
+        # Check if any of the terminal conditions have been reached
+        kingCaptured = b.king_captured()
+        walledIn = b.walled_in()
+        if kingCaptured == 1 or walledIn == 1:
+            # Player 1 satisfied a win condition
+            return 1
+        if kingCaptured == -1 or walledIn == -1:
+            # Player 2 satisfied a win condition
+            return -1
+        else:
+            # Neither player satisfied a win condition
+            return 0
 
     def getCanonicalForm(self, board, player):
         """
