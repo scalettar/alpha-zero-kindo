@@ -270,8 +270,8 @@ class KindoGame(Game):
         # Print number of moves for each player
         # Player 1 Moves: current turn | next turn
         # Player 2 Moves: current turn | next turn
-        print("Player 1 Moves:", b.player1.movesCurrent, "|", b.player1.movesNext, \
-            " Player -1 Moves:", b.player2.movesCurrent, "|", b.player2.movesNext)
+        print("Player 1 Moves:", b.tiles[n-1][0].movesCurrent, "|", b.tiles[n-1][0].movesNext)
+        print("Player -1 Moves:", b.tiles[0][n-1].movesCurrent, "|", b.tiles[n-1][0].movesNext)
         # Print y-coordinate key
         print("       ", end="")
         for y in range(n):
