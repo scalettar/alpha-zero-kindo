@@ -48,6 +48,24 @@ class Board():
         self.currentPlayer = self.player1
         self.opposingPlayer = self.player2
 
+    # def get_this_player(self, player):
+    #     '''
+    #     Returns the player's Player object given a playerID (player)
+    #     '''
+    #     if self.player1.playerID == player:
+    #         return self.player1
+    #     else:
+    #         return self.player2
+
+    # def get_other_player(self, player):
+    #     '''
+    #     Returns the other player's Player object given a playerID (player)
+    #     '''
+    #     if self.player1.playerID == player:
+    #         return self.player2
+    #     else:
+    #         return self.player1
+
     def get_legal_moves(self, player):
         '''
         Returns all the legal moves for the player in the given board state
@@ -237,22 +255,22 @@ class Board():
                 if self.tiles[x][y].owner == self.currentPlayer.playerID:
                     self.tiles[x][y].hasDot = False
         
-    def king_captured(self):
+    def king_captured(self, player):
         '''
         Checks if a King tile has been captured
         If yes, returns winning player (1 or -1)
         Else returns 0
         '''
         # Check if player 1 captured player 2's King tile
-        if self.tiles[0][4].owner == 1:
-            return 1
+        if self.tiles[0][self.n-1].owner == 1:
+            return 1 if player == 1 else -1
         # Check if player 2 captured player 1's King tile
-        if self.tiles[4][0].owner == -1:
-            return -1
+        if self.tiles[self.n-1][0].owner == -1:
+            return 1 if player == -1 else -1
         # No King tile has been captured
         return 0
 
-    def walled_in(self):
+    def walled_in(self, player):
         '''
         !!!WARNING!!! This method only works for n=5, needs to be generalized
         Checks if a player has been walled in (impossible to ever capture enemy King)
@@ -265,20 +283,22 @@ class Board():
             # Check if player 1 owns all the tiles walling in player 2
             if self.tiles[0][2].owner == 1 and self.tiles[1][2].owner == 1 \
             and self.tiles[2][3].owner == 1 and self.tiles[2][4].owner == 1:
-                return 1
+                return 1 if player == 1 else -1
         if self.tiles[0][3].wallDirection == 2 and self.tiles[1][4].wallDirection == 1:
+            # Check if player 1 owns all the tiles walling in player 2
             if self.tiles[0][3].owner == 1 and self.tiles[1][4].owner == 1:
-                return 1
+                return 1 if player == 1 else -1
         # Check if player 2 has walled in player 1
         if self.tiles[2][0].wallDirection == 3 and self.tiles[2][1].wallDirection == 3 \
             and self.tiles[3][2].wallDirection == 4 and self.tiles[4][2].wallDirection == 4:
             # Check if player 2 owns all the tiles walling in player 1
             if self.tiles[2][0].owner == -1 and self.tiles[2][1].owner == -1 \
             and self.tiles[3][2].owner == -1 and self.tiles[4][2].owner == -1:
-                return -1
+                return 1 if player == -1 else -1
         if self.tiles[3][0].wallDirection == 3 and self.tiles[4][1].wallDirection == 4:
+            # Check if player 2 owns all the tiles walling in player 1
             if self.tiles[3][0].owner == -1 and self.tiles[4][1].owner == -1:
-                return -1
+                return 1 if player == -1 else -1
         # No player has been walled in
         return 0
 

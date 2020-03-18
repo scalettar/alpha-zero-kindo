@@ -11,3 +11,7 @@ checkpoints/
 # For PyCharm users
 .idea/
 
+# IDE settings
+.vscode/
+.spyproject/
+

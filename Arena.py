@@ -35,22 +35,29 @@ class Arena():
         """
         players = [self.player2, None, self.player1]
         curPlayer = 1
+        # Set board to initial board (game) state
         board = self.game.getInitBoard()
+        # Initialize iteration count to 0 (tracks number of total moves made)
         it = 0
+        # Play game until a player wins
         while self.game.getGameEnded(board, curPlayer)==0:
             it+=1
             if verbose:
                 assert(self.display)
-                print("Turn ", str(it), "Player ", str(curPlayer))
+                print("Move:", str(it), " ", "Player:", str(curPlayer))
                 self.display(board)
+            # Get action based on current player's choice (player's play method)
             action = players[curPlayer+1](self.game.getCanonicalForm(board, curPlayer))
-
+            # Get all valid moves for current player using canonical board with player 1
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer),1)
-
+            # Check if action chosen by player is not a valid action
             if valids[action]==0:
+                # Action invalid, return assertion error
                 print(action)
                 assert valids[action] >0
+            # Action was valid, get next board state and player using chosen action
             board, curPlayer = self.game.getNextState(board, curPlayer, action)
+        # Game is over, display result
         if verbose:
             assert(self.display)
             print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))

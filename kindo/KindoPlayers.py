@@ -13,7 +13,10 @@ class HumanKindoPlayer():
         # Print list of valid moves
         for i in range(len(validMoves)):
             if validMoves[i]:
-                print()
+                x = int(i / (self.game.n * self.game.tileTypes))
+                y = int((i % (self.game.n * self.game.tileTypes)) / self.game.tileTypes)
+                w = (i % (self.game.n * self.game.tileTypes)) % self.game.tileTypes
+                print("[", x, y, w, end=" ] ")
         # Player selects a move
         while True:
             playerInput = input()

@@ -125,7 +125,7 @@ class KindoGame(Game):
         # Execute move
         b.execute_move(move, player)
         # Return updated state and current player
-        return (b.tiles, b.currentPlayer)
+        return (b.tiles, b.currentPlayer.playerID)
         
     def getValidMoves(self, board, player):
         """
@@ -170,13 +170,13 @@ class KindoGame(Game):
         b = Board(self.n)
         b.tiles = np.copy(board)
         # Check if any of the terminal conditions have been reached
-        kingCaptured = b.king_captured()
-        walledIn = b.walled_in()
+        kingCaptured = b.king_captured(player)
+        walledIn = b.walled_in(player)
         if kingCaptured == 1 or walledIn == 1:
-            # Player 1 satisfied a win condition
+            # A win condition was satisfied by the player
             return 1
         if kingCaptured == -1 or walledIn == -1:
-            # Player 2 satisfied a win condition
+            # A win condition was satisfied by the opponent
             return -1
         else:
             # Neither player satisfied a win condition
@@ -202,7 +202,8 @@ class KindoGame(Game):
         # If player 2 swap owner of all tiles on board
         if player == -1:
             b.swap_all_tile_owners()
-        return b
+        # return b
+        return board
 
     def getSymmetries(self, board, pi):
         """
@@ -264,6 +265,13 @@ class KindoGame(Game):
         #   |       |       |       |       |       |
         #   ----------------------------------------- 
         n = board.shape[0]
+        b = Board(n)
+        b.tiles = np.copy(board)
+        # Print number of moves for each player
+        # Player 1 Moves: current turn | next turn
+        # Player 2 Moves: current turn | next turn
+        print("Player 1 Moves:", b.player1.movesCurrent, "|", b.player1.movesNext, \
+            " Player -1 Moves:", b.player2.movesCurrent, "|", b.player2.movesNext)
         # Print y-coordinate key
         print("       ", end="")
         for y in range(n):
