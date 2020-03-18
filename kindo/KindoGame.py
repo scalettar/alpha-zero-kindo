@@ -196,7 +196,13 @@ class KindoGame(Game):
                             board as is. When the player is black, we can invert
                             the colors and return the board.
         """
-        pass
+        # Create a copy of the current board
+        b = Board(self.n)
+        b.tiles = np.copy(board)
+        # If player 2 swap owner of all tiles on board
+        if player == -1:
+            b.swap_all_tile_owners()
+        return b
 
     def getSymmetries(self, board, pi):
         """

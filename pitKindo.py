@@ -24,10 +24,12 @@ if mini_kindo:
 else:
     g = KindoGame(5)
 
-# Define all players
+# Define all players (these are actually setting the 'play' functions that will be used)
+# See Arena.py for description on how this works
 hp = HumanKindoPlayer(g).play
 gp = GreedyKindoPlayer(g).play
 rp = RandomPlayer(g).play
+
 # NNet player 1
 # n1 = NNet(g)
 # if mini_kindo:
@@ -37,6 +39,7 @@ rp = RandomPlayer(g).play
 # args1 = dotdict({'numMCTSSims': 50, 'cpuct':1.0})
 # mcts1 = MCTS(g, n1, args1)
 # n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
+
 # # NNet player 2
 # n2 = NNet(g)
 # if mini_kindo:

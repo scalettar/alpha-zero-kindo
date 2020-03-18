@@ -55,7 +55,6 @@ class Board():
         '''
         # Create set to store legal moves
         legalMoves = set()
-
         # Check each tile
         for x in range(self.n):
             for y in range(self.n):
@@ -307,6 +306,18 @@ class Board():
             return self.player2
         else:
             return self.player1
+
+    def swap_all_tile_owners(self):
+        '''
+        Swaps the ownership of all tiles on the board
+        Used to get the canonical form in KindoGame
+        '''
+        for x in range(self.n):
+            for y in range(self.n):
+                if self.tiles[x][y].owner == 1:
+                    self.tiles[x][y].owner = -1
+                elif self.tiles[x][y].owner == -1:
+                    self.tiles[x][y].owner = 1
 
 class Tile:
     '''
