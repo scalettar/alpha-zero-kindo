@@ -123,9 +123,9 @@ class KindoGame(Game):
         w = (action % (self.n * self.tileTypes)) % self.tileTypes
         move = (x, y, w)
         # Execute move
-        b.execute_move(move, player)
+        currentPlayerID = b.execute_move(move, player)
         # Return updated state and current player
-        return (b.tiles, b.currentPlayer.playerID)
+        return (b.tiles, currentPlayerID)
         
     def getValidMoves(self, board, player):
         """
@@ -202,8 +202,8 @@ class KindoGame(Game):
         # If player 2 swap owner of all tiles on board
         if player == -1:
             b.swap_all_tile_owners()
-        # return b
-        return board
+        # return canonical board
+        return np.array(b.tiles)
 
     def getSymmetries(self, board, pi):
         """
@@ -272,6 +272,8 @@ class KindoGame(Game):
         # Player 2 Moves: current turn | next turn
         print("Player 1 Moves:", b.tiles[n-1][0].movesCurrent, "|", b.tiles[n-1][0].movesNext)
         print("Player -1 Moves:", b.tiles[0][n-1].movesCurrent, "|", b.tiles[n-1][0].movesNext)
+        print("____________________________________________")
+        print("")
         # Print y-coordinate key
         print("       ", end="")
         for y in range(n):

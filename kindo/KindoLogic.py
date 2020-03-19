@@ -148,6 +148,14 @@ class Board():
             currentPlayer.movesNext = self.MOVES_NEXT_BASE
             # Remove dots from new current player's tiles
             self._new_turn_clear_dots(currentPlayer)
+        # Update player
+        if currentPlayer.playerID == 1:
+            self.tiles[self.n-1][0] = currentPlayer
+            self.tiles[0][self.n-1] = opposingPlayer
+        else:
+            self.tiles[self.n-1][0] = opposingPlayer
+            self.tiles[0][self.n-1] = currentPlayer
+        return currentPlayer.playerID
 
     def _check_valid_adjacent(self, x, y, player):
         '''
