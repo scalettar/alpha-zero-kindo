@@ -93,7 +93,7 @@ class Board():
                             # No wall already facing that direction on tile x, y
                             newMoves.append((x, y, i))
                     legalMoves.update(newMoves)
-                else:
+                elif self.tiles[x, y, self.OWNER] != player:
                     # Tile not owned by current player
                     # Valid moves: capture tile if an adjacent tile owned by player
                     # and is not being blocked by a wall on this tile
@@ -166,11 +166,11 @@ class Board():
             self._new_turn_clear_dots(currentPlayer)
         # Update player
         if currentPlayer[self.PLAYER_ID] == 1:
-            self.tiles[self.n-1, 0] = currentPlayer
-            self.tiles[0, self.n-1] = opposingPlayer
+            self.tiles[self.n-1, 0, :] = currentPlayer
+            self.tiles[0, self.n-1, :] = opposingPlayer
         else:
-            self.tiles[self.n-1, 0] = opposingPlayer
-            self.tiles[0, self.n-1] = currentPlayer
+            self.tiles[self.n-1, 0, :] = opposingPlayer
+            self.tiles[0, self.n-1, :] = currentPlayer
         return currentPlayer[self.PLAYER_ID]
 
     def _check_valid_adjacent(self, x, y, player):

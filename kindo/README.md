@@ -4,19 +4,32 @@ This is an implementation of the game Kindo in the Alpha Zero General framework.
 
 ## How to Train
 
-In ```main.py``` change the imports to:
-```python
-from kindo.KindoGame import KindoGame
-from kindo.keras.NNet import NNetWrapper as nn
+```
+python main.py
 ```
 
 ## How to Play
 
-In ```pit.py``` change the imports to:
-```python
-from kindo.KindoGame import KindoGame
-from kindo.KindoPlayers import *
+In the pitKindo.py file, change the values of the following variables to choose what kind of players you want to be in the game:
+
+* player1_type = <selection>
+* player2_type = <selection>
+
+A player can be a human or one of the following AI agents:
+
+* nn = AI trained through a neural network
+* gp = AI which acts through a simple evaluation method
+* rp = AI which acts randomly
+
+Once you have set the players you wish to use, simply run the following command:
+
 ```
+python pitKindo.py
+```
+
+This will play two games with each player starting one game as player 1 and one game as player 2.
+
+Note: You can also play the game with two human players at http://www.playkindo.com
 
 ## Game Rules
 
