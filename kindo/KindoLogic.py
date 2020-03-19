@@ -1,4 +1,3 @@
-import math
 import numpy as np
 
 '''
@@ -226,7 +225,7 @@ class Board():
             # Explore tile corresponding to first flattened index in stack
             currentIndex = stack.pop()
             # Get x and y from flattened index
-            x = math.floor(currentIndex / self.n)
+            x = currentIndex // self.n
             y = currentIndex % self.n
             # If tile is not already in connected array, check if connected
             if not currentIndex in connected:
@@ -239,7 +238,7 @@ class Board():
                         stack.append(currentIndex - self.n)
                     if (currentIndex + 1) % self.n != 0: # Check tile to right
                         stack.append(currentIndex + 1)
-                    if currentIndex < (self.n * (self.n + 1)): # Check tile below
+                    if currentIndex < (self.n * (self.n - 1)): # Check tile below
                         stack.append(currentIndex + self.n)
                     if currentIndex % self.n != 0: # Check tile to left
                         stack.append(currentIndex - 1)
@@ -255,9 +254,9 @@ class Board():
             for y in range(self.n):
                 # Check if tile owned by opponent is no longer connected
                 if self.tiles[x, y, self.OWNER] == opposingPlayer[self.PLAYER_ID] \
-                    and not (connectedOpponent[x, y] == opposingPlayer[self.PLAYER_ID]):
+                    and not ((x * self.n + y) in connectedOpponent):
                     # Swap tile owner from opponent to current player
-                    self.tiles[x, y, self.OWNER] = currentPlayer
+                    self.tiles[x, y, self.OWNER] = currentPlayer[self.PLAYER_ID]
                     # Remove any walls and dots from the tile
                     self.tiles[x, y, self.HAS_DOT] = False
                     self.tiles[x, y, self.WALL_DIRECTION] = 0
