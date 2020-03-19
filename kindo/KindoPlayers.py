@@ -80,7 +80,7 @@ class RandomPlayer():
 
     def play(self, board):
         # Get list of valid moves
-        validMoves = self.game.getValidmoves(board, 1)
+        validMoves = self.game.getValidMoves(board, 1)
         # Randomly pick an action
         action = np.random.randint(self.game.getActionSize())
         # Randomly pick actions until one is a valid move
