@@ -23,10 +23,10 @@ class KindoGame(Game):
         -1: "o"
     }
     display_wallDirection = {
-        1: "^",
-        2: ">",
-        3: "v",
-        4: "<" 
+        1: ".",
+        2: ":",
+        3: ".",
+        4: ":" 
     }
     display_hasDot = {
         True: "-",
@@ -216,7 +216,21 @@ class KindoGame(Game):
                        form of the board and the corresponding pi vector. This
                        is used when training the neural network from examples.
         """
-        pass
+        # Check for correct pi length
+        assert(len(pi) == self.getActionSize())
+        pi_board = np.reshape(pi[:-1], (self.n, self.n, self.tileTypes))
+        symmetries_list = []
+        # Generate symmetries
+        for i in range(1, 5):
+            for j in [True, False]:
+                newB = np.rot90(board, i)
+                newPi = np.rot90(pi_board, i)
+                if j:
+                    newB = np.fliplr(newB)
+                    newPi = np.fliplr(newPi)
+                symmetries_list += [(newB, list(newPi.ravel()) + [pi[-1]])]
+        return symmetries_list
+
 
     def stringRepresentation(self, board):
         """
@@ -227,7 +241,7 @@ class KindoGame(Game):
             boardString: a quick conversion of board to a string format.
                          Required by MCTS for hashing.
         """
-        pass
+        board.tostring()
 
     def getScore(self, board, player):
         '''
@@ -312,23 +326,29 @@ class KindoGame(Game):
                 elif wD == 1 or wD == 4:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Third
-                print(" ", end="")
+                if wD == 1:
+                    print(KindoGame.display_wallDirection[wD], end="")
+                else:
+                    print(" ", end="")
                 # Fourth (top middle)
                 if wD == 1:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
                     print(KindoGame.display_owner[o], end="")
                 # Fifth
-                print(" ", end="")
+                if wD == 1:
+                    print(KindoGame.display_wallDirection[wD], end="")
+                else:
+                    print(" ", end="")
                 # Sixth (top right)
                 if isUnwallable[y]:
                     print(KindoGame.display_isUnwallable[iU], end="")
                 elif wD == 1 or wD == 2:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Seventh
                 print(" |", end="")
             print("")
@@ -384,23 +404,29 @@ class KindoGame(Game):
                 elif wD == 3 or wD == 4:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Third
-                print(" ", end="")
+                if wD == 3:
+                    print(KindoGame.display_wallDirection[wD], end="")
+                else:
+                    print(" ", end="")
                 # Fourth (bottom middle)
                 if wD == 3:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
                     print(KindoGame.display_owner[o], end="")
                 # Fifth
-                print(" ", end="")
+                if wD == 3:
+                    print(KindoGame.display_wallDirection[wD], end="")
+                else:
+                    print(" ", end="")
                 # Sixth (bottom right)
                 if iU == True:
                     print(KindoGame.display_isUnwallable[iU], end="")
                 elif wD == 2 or wD == 3:
                     print(KindoGame.display_wallDirection[wD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Seventh
                 print(" |", end="")
             print("")

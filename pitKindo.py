@@ -4,7 +4,6 @@ from kindo.KindoGame import KindoGame
 from kindo.KindoPlayers import *
 from kindo.pytorch.NNet import NNetWrapper as NNet
 
-
 import numpy as np
 from utils import *
 
@@ -17,7 +16,7 @@ mini_kindo = False
 # Player types:
 # 0: human, 1: nn, 2: greedy, else: random
 player1_type = 3
-player2_type = 0
+player2_type = 3
 
 if mini_kindo:
     g = KindoGame(4)

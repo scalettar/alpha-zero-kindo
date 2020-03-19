@@ -2,24 +2,59 @@
 
 This is an implementation of the game Kindo in the Alpha Zero General framework.
 
+## File Explanation
+
+The following is a brief description of all files implemented specifically for Kindo:
+
+* mainKindo.py:  
+* pitKindo.py: Used to pit two players (humans or AI agents) against each other using the Arena.py Arena class
+* KindoPlayers.py: Defines each type of player (human and AI agent) and how each player chooses an action based on the valid action for a given board state
+* KindoLogic.py: Manages the board (state) logic for Kindo by updating and retrieving values from the board
+* KindoGame.py: Calls the appropriate methods in KindoLogic.py when required by the game (intermediary between KindoLogic.py and Arena.py)
+
+Other files used by Kindo that are part of the Alpha Zero General framework:
+
+* Arena.py: Plays games between two players by making the appropriate calls to KindoPlayer.py to choose actions and KindoGame.py to get the next state given the chosen action
+* Coach.py: 
+
+I have provided detailed comments in most of these files for a more thorough understanding of how each file operates.
+
 ## How to Train
 
+In the mainKindo.py file, set the args to the values desired for training.
+
+Once you have chosen the desired args, run the following command to begin the training:
+
 ```
-python main.py
+python mainKindo.py
 ```
+
+mainKindo.py process:
+
+* Create g, an instance of KindoGame (implementation in KindoGame.py)
+* Create nnet, an instance of NNetWrapper (implementation in Kindo's NNet.py)
+* If flag set, nnet loads model from checkpoint, otherwise nnet starts a new one
+* Create c, an instance of Coach (implementation in Coach.py)
+* If flag set, c loads training examples, otherwise starts with no examples
+* Start learning using Coach's learn() method
+
+Coach.learn() process:
+
+
 
 ## How to Play
 
-In the pitKindo.py file, change the values of the following variables to choose what kind of players you want to be in the game:
+In the pitKindo.py file, set the following variables to the integer values corresponding to what kind of players you want to be in the game:
 
-* player1_type = <selection>
-* player2_type = <selection>
+* player1_type = 
+* player2_type =
 
-A player can be a human or one of the following AI agents:
+The player types are:
 
-* nn = AI trained through a neural network
-* gp = AI which acts through a simple evaluation method
-* rp = AI which acts randomly
+* (0) hp = Human player
+* (1) nn = AI trained through a neural network
+* (2) gp = AI which acts through a simple evaluation method
+* (3) rp = AI which acts randomly
 
 Once you have set the players you wish to use, simply run the following command:
 
