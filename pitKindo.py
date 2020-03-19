@@ -17,7 +17,7 @@ mini_kindo = False
 # Player types:
 # 0: human, 1: nn, 2: greedy, else: random
 player1_type = 0
-player2_type = 3
+player2_type = 0
 
 if mini_kindo:
     g = KindoGame(4)

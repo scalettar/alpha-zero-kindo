@@ -50,13 +50,13 @@ class Arena():
             action = players[curPlayer+1](self.game.getCanonicalForm(board, curPlayer))
             
             # ADDED until getCanonicalForm fixed (alters current board instead of board copy)
-            self.game.getCanonicalForm(board, curPlayer)
+            # self.game.getCanonicalForm(board, curPlayer)
 
             # Get all valid moves for current player using canonical board with player 1
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer),1)
 
             # ADDED until getCanonicalForm fixed (alters current board instead of board copy)
-            self.game.getCanonicalForm(board, curPlayer)
+            # self.game.getCanonicalForm(board, curPlayer)
             
             # Check if action chosen by player is not a valid action
             if valids[action]==0:

@@ -270,8 +270,8 @@ class KindoGame(Game):
         # Print number of moves for each player
         # Player 1 Moves: current turn | next turn
         # Player 2 Moves: current turn | next turn
-        print("Player 1 Moves:", b.tiles[n-1][0].movesCurrent, "|", b.tiles[n-1][0].movesNext)
-        print("Player -1 Moves:", b.tiles[0][n-1].movesCurrent, "|", b.tiles[n-1][0].movesNext)
+        print("Player 1 Moves:", b.tiles[n-1, 0, 6], "|", b.tiles[n-1, 0, 7])
+        print("Player -1 Moves:", b.tiles[0, n-1, 6], "|", b.tiles[n-1, 0, 7])
         print("____________________________________________")
         print("")
         # Print y-coordinate key
@@ -290,11 +290,11 @@ class KindoGame(Game):
             isUnwallable = []
             # Get tile values
             for y in range(n):
-                owner.append(board[x][y].owner)
-                wallDirection.append(board[x][y].wallDirection)
-                hasDot.append(board[x][y].hasDot)
-                isKing.append(board[x][y].isKing)
-                isUnwallable.append(board[x][y].isUnwallable)
+                owner.append(board[x, y, 0])
+                wallDirection.append(board[x, y, 1])
+                hasDot.append(board[x, y, 2])
+                isKing.append(board[x, y, 3])
+                isUnwallable.append(board[x, y, 4])
             # Print top line of row x
             print("   |", end="")
             for y in range(n):
