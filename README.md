@@ -1,47 +1,208 @@
-# Alpha Zero General (any game, any framework!)
+# Alpha Zero General Implementation of Kindo
 
-A simplified, highly flexible, commented and (hopefully) easy to understand implementation of self-play based reinforcement learning based on the AlphaGo Zero paper (Silver et al). It is designed to be easy to adopt for any two-player turn-based adversarial game and any deep learning framework of your choice. A sample implementation has been provided for the game of Othello in PyTorch, Keras, TensorFlow and Chainer. An accompanying tutorial can be found [here](http://web.stanford.edu/~surag/posts/alphazero.html). We also have implementations for GoBang and TicTacToe.
+This is an implementation of the game Kindo in the Alpha Zero General framework.
 
-To use a game of your choice, subclass the classes in ```Game.py``` and ```NeuralNet.py``` and implement their functions. Example implementations for Othello can be found in ```othello/OthelloGame.py``` and ```othello/{pytorch,keras,tensorflow,chainer}/NNet.py```. 
+## File Explanation
 
-```Coach.py``` contains the core training loop and ```MCTS.py``` performs the Monte Carlo Tree Search. The parameters for the self-play can be specified in ```main.py```. Additional neural network parameters are in ```othello/{pytorch,keras,tensorflow,chainer}/NNet.py``` (cuda flag, batch size, epochs, learning rate etc.). 
+The following is a brief description of all files implemented specifically for Kindo:
 
-To start training a model for Othello:
-```bash
-python main.py
+* mainKindo.py:  
+* pitKindo.py: Used to pit two players (humans or AI agents) against each other using the Arena.py Arena class
+* KindoPlayers.py: Defines each type of player (human and AI agent) and how each player chooses an action based on the valid action for a given board state
+* KindoLogic.py: Manages the board (state) logic for Kindo by updating and retrieving values from the board
+* KindoGame.py: Calls the appropriate methods in KindoLogic.py when required by the game (intermediary between KindoLogic.py and Arena.py)
+
+Other files used by Kindo that are part of the Alpha Zero General framework:
+
+* Arena.py: Plays games between two players by making the appropriate calls to KindoPlayer.py to choose actions and KindoGame.py to get the next state given the chosen action
+* Coach.py: Executes self-play learning
+
+I have provided detailed comments in most of these files for a more thorough understanding of how each file operates.
+
+## How to Train
+
+In the mainKindo.py file, set the args to the values desired for training.
+
+Once you have chosen the desired args, run the following command to begin the training:
+
 ```
-Choose your framework and game in ```main.py```.
-
-### Docker Installation
-For easy environment setup, we can use [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Once you have nvidia-docker set up, we can then simply run:
-```
-./setup_env.sh
-```
-to set up a (default: pyTorch) Jupyter docker container. We can now open a new terminal and enter:
-```
-docker exec -ti pytorch_notebook python main.py
+python mainKindo.py
 ```
 
-### Experiments
-We trained a PyTorch model for 6x6 Othello (~80 iterations, 100 episodes per iteration and 25 MCTS simulations per turn). This took about 3 days on an NVIDIA Tesla K80. The pretrained model (PyTorch) can be found in ```pretrained_models/othello/pytorch/```. You can play a game against it using ```pit.py```. Below is the performance of the model against a random and a greedy baseline with the number of iterations.
-![alt tag](https://github.com/suragnair/alpha-zero-general/raw/master/pretrained_models/6x6.png)
+mainKindo.py process:
 
-A concise description of our algorithm can be found [here](https://github.com/suragnair/alpha-zero-general/raw/master/pretrained_models/writeup.pdf).
+* Create g, an instance of KindoGame (implementation in KindoGame.py)
+* Create nnet, an instance of NNetWrapper (implementation in Kindo's NNet.py) using KindoGame g
+* If flag set, nnet loads model from checkpoint, otherwise nnet starts a new one
+* Create c, an instance of Coach (implementation in Coach.py) using KindoGame g, NNetWrapper nnet, and mainKindo.py's args
+* If flag set, c loads training examples, otherwise starts with no examples
+* Start learning with the Kindo game object and Kindo neural net using Coach's learn() method
 
-### Contributing
-While the current code is fairly functional, we could benefit from the following contributions:
-* Game logic files for more games that follow the specifications in ```Game.py```, along with their neural networks
-* Neural networks in other frameworks
-* Pre-trained models for different game configurations
-* An asynchronous version of the code- parallel processes for self-play, neural net training and model comparison. 
-* Asynchronous MCTS as described in the paper
+Coach.learn() process:
 
-### Contributors and Credits
-* [Shantanu Thakoor](https://github.com/ShantanuThakoor) and [Megha Jhunjhunwala](https://github.com/jjw-megha) helped with core design and implementation.
-* [Shantanu Kumar](https://github.com/SourKream) contributed TensorFlow and Keras models for Othello.
-* [Evgeny Tyurin](https://github.com/evg-tyurin) contributed rules and a trained model for TicTacToe.
-* [MBoss](https://github.com/1424667164) contributed rules and a model for GoBang.
-* [Jernej Habjan](https://github.com/JernejHabjan) contributed RTS game.
+* 
 
-Thanks to [pytorch-classification](https://github.com/bearpaw/pytorch-classification) and [progress](https://github.com/verigak/progress).
+## How to Play
 
+In the pitKindo.py file, set the following variables to the integer values corresponding to what kind of players you want to be in the game:
+
+* player1_type = 
+* player2_type =
+
+The player types are:
+
+* (0) hp = Human player
+* (1) nn = AI trained through a neural network
+* (2) gp = AI which acts through a simple evaluation method
+* (3) rp = AI which acts randomly
+
+Once you have set the players you wish to use, simply run the following command:
+
+```
+python pitKindo.py
+```
+
+This will play two games with each player starting one game as player 1 and one game as player 2.
+
+Note: You can also play the game with two human players at http://www.playkindo.com
+
+## Game Rules
+
+**Goal**
+
+Capture the opponent's King tile to win the game.
+
+**Turn**
+
+Each turn you are given 2 moves by default (up to 4 moves maximum if awarded bonus moves).
+You can use each of your moves to perform one of the following actions:
+
+* Convert a neutral tile which is horizontally or vertically adjacent to a tile you control
+* Capture an enemy tile which is horizontally or vertically adjacent to a tile you control
+* Place a wall on a tile you already control (if that tile already has a wall, your move will be used to change the direction of the wall)
+
+**Walls**
+
+Normally you can capture an enemy tile as long as it is horizontally or vertically adjacent to a tile you control. However, if the enemy tile has a wall on the side your adjacent tile is on, it blocks you from capturing that enemy tile from that direction.
+
+NOTE: Walls cannot be placed on the tiles located on the diagonal from the top left to the bottom right. These tiles have a "bracket" image as a reminder that walls cannot be placed there.
+
+**Mass Capture**
+
+When you capture an enemy tile, if it results in any of their tiles being isolated from their King (no path of friendly tiles leading back to their king), those tiles will also be captured.
+
+**Last Played**
+
+When you play a tile, it will be marked with a small square in the center. This means that you played the tile during your last turn. At the start of your turn, this square will be removed. The reason these squares are marked will be explained in the "Bonus Moves" section.
+
+**Bonus Moves**
+
+You can earn multiple bonus moves during a single turn but may have no more than 4 moves total.
+There are two ways to earn bonus moves:
+
+* If you perform a "Mass Capture" (isolate enemy tiles)
+* If your opponent captures a tile you played during your last turn (a tile marked with a square in the center)
+
+NOTE: Bonus moves always apply to your next turn, not your current turn.
+
+## Game Depiction
+
+When playing using pit.py, the game tiles are depicted as follows:
+
+    BOARD
+            0       1       2       3       4    
+        -----------------------------------------
+        |       |       |       |       |       |
+     0  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     1  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     2  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     3  |       |       |       |       |       |
+        |       |       |       |       |       |
+        -----------------------------------------
+        |       |       |       |       |       |
+     4  |       |       |       |       |       |
+        |       |       |       |       |       |
+        ----------------------------------------- 
+
+    NEUTRAL TILE
+    ---------
+    |       |
+    |       |
+    |       |
+    ---------
+
+    UNWALLABLE NEUTRAL TILE
+    ---------
+    | .   . |
+    |       |
+    | .   . |
+    ---------
+
+    P1 NO WALL
+
+    ---------
+    |       |
+    |   x   |
+    |       |
+    ---------
+
+    P1 NO WALL (PLAYED WITH-IN LAST TURN)
+
+    ---------
+    |   -   |
+    | - x - |
+    |   -   |
+    ---------
+
+    P1 WALL NORTH
+    ---------
+    | ..... |
+    |   x   |
+    |       |
+    ---------
+
+    P1 WALL EAST
+    ---------
+    |     : |
+    |   x : |
+    |     : |
+    ---------
+
+    P1 WALL SOUTH
+    ---------
+    |       |
+    |   x   |
+    | ..... |
+    ---------
+
+    P1 WALL WEST
+    ---------
+    | :     |
+    | : x   |
+    | :     |
+    ---------
+
+    P2 tiles are the same but with o instead of x
+
+## Credits
+[Daniel Scalettar](https://github.com/scalettar/)
+
+* Implementation of Kindo in Alpha Zero General
+
+[Paul Vauvrey](http://www.pvauvrey.com/)
+
+* Original Kindo game design
+
+[Alpha Zero General Repository](https://github.com/suragnair/alpha-zero-general)
+
+* Original implementation of Alpha Zero General
+  

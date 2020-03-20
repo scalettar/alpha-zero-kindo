@@ -333,10 +333,14 @@ class KindoGame(Game):
                 else:
                     print(" ", end="")
                 # Fourth (top middle)
-                if wD == 1:
+                if iK == True:
+                    print(KindoGame.display_isKing[iK], end="")
+                elif wD == 1:
                     print(KindoGame.display_wallDirection[wD], end="")
+                elif hD == True:
+                    print(KindoGame.display_hasDot[hD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Fifth
                 if wD == 1:
                     print(KindoGame.display_wallDirection[wD], end="")
@@ -364,26 +368,29 @@ class KindoGame(Game):
                 # First
                 print(" ", end="")
                 # Second (middle left)
-                if wD == 4:
-                    print(KindoGame.display_wallDirection[wD], end="")
-                else:
-                    print(KindoGame.display_owner[o], end="")
-                # Third
-                print(" ", end="")
-                # Fourth (middle middle i.e. center)
                 if iK == True:
                     print(KindoGame.display_isKing[iK], end="")
+                elif wD == 4:
+                    print(KindoGame.display_wallDirection[wD], end="")
                 elif hD == True:
                     print(KindoGame.display_hasDot[hD], end="")
                 else:
                     print(" ", end="")
+                # Third
+                print(" ", end="")
+                # Fourth (middle middle i.e. center)
+                print(KindoGame.display_owner[o], end="")
                 # Fifth
                 print(" ", end="")
                 # Sixth (middle right)
-                if wD == 2:
+                if iK == True:
+                    print(KindoGame.display_isKing[iK], end="")
+                elif wD == 2:
                     print(KindoGame.display_wallDirection[wD], end="")
+                elif hD == True:
+                    print(KindoGame.display_hasDot[hD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Seventh
                 print(" |", end="")
             print("")
@@ -411,10 +418,14 @@ class KindoGame(Game):
                 else:
                     print(" ", end="")
                 # Fourth (bottom middle)
-                if wD == 3:
+                if iK == True:
+                    print(KindoGame.display_isKing[iK], end="")
+                elif wD == 3:
                     print(KindoGame.display_wallDirection[wD], end="")
+                elif hD == True:
+                    print(KindoGame.display_hasDot[hD], end="")
                 else:
-                    print(KindoGame.display_owner[o], end="")
+                    print(" ", end="")
                 # Fifth
                 if wD == 3:
                     print(KindoGame.display_wallDirection[wD], end="")
@@ -432,4 +443,3 @@ class KindoGame(Game):
             print("")
             # Print bottom boarder of row tiles
             print("   -----------------------------------------")
-  

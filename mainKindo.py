@@ -1,10 +1,10 @@
 from Coach import Coach
 from kindo.KindoGame import KindoGame as Game
-from kindo.pytorch.NNet import NNetWrapper as nn
+from kindo.keras.NNet import NNetWrapper as nn
 from utils import *
 
 args = dotdict({
-    'numIters': 1000,
+    'numIters': 20,
     'numEps': 100,              # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.

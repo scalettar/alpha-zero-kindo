@@ -15,3 +15,18 @@ checkpoints/
 .vscode/
 .spyproject/
 
+# files unused by kindo
+docker/
+connect4/
+gobang/
+othello/
+rts/
+tafl/
+tictactoe/
+pretrained_models/*
+!pretrained_models/kindo/
+main.py
+pit.py
+READMEorig.md
+setup_env.sh
+test_all_games.py
