@@ -6,7 +6,7 @@ This is an implementation of the game Kindo in the Alpha Zero General framework.
 
 The following is a brief description of all files implemented specifically for Kindo:
 
-* mainKindo.py:  
+* mainKindo.py: Primary driver used to set up and conduct training  
 * pitKindo.py: Used to pit two players (humans or AI agents) against each other using the Arena.py Arena class
 * KindoPlayers.py: Defines each type of player (human and AI agent) and how each player chooses an action based on the valid action for a given board state
 * KindoLogic.py: Manages the board (state) logic for Kindo by updating and retrieving values from the board
@@ -37,10 +37,6 @@ mainKindo.py process:
 * Create c, an instance of Coach (implementation in Coach.py) using KindoGame g, NNetWrapper nnet, and mainKindo.py's args
 * If flag set, c loads training examples, otherwise starts with no examples
 * Start learning with the Kindo game object and Kindo neural net using Coach's learn() method
-
-Coach.learn() process:
-
-* 
 
 ## How to Play
 
